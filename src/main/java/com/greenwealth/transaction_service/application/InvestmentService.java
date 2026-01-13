@@ -3,6 +3,7 @@ package com.greenwealth.transaction_service.application;
 import com.greenwealth.transaction_service.domain.model.Investment;
 import com.greenwealth.transaction_service.domain.model.Transaction;
 import com.greenwealth.transaction_service.domain.repository.InvestmentRepository;
+import com.greenwealth.transaction_service.infrastructure.messaging.KafkaProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.math.RoundingMode;
 @RequiredArgsConstructor
 public class InvestmentService {
     private final InvestmentRepository repository;
+    private final KafkaProducer kafkaProducer;
     public void processInvestment(Transaction transaction) {
         // calculate RoundUP
         BigDecimal amount = transaction.getAmount();
@@ -27,7 +29,9 @@ public class InvestmentService {
 
             repository.save(investment); // we win money
 
-            System.out.println("save the investment in BDD:" + roundUp + "MAD" );
+            //kafka action
+            String eventMessage = "New Investment " + roundUp + "MAD for Client ID"+ roundUp + transaction.getId();
+            kafkaProducer.sendInvestmentEvent(eventMessage);;
         }
     }
 
