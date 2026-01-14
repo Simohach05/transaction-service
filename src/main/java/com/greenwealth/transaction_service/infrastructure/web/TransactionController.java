@@ -2,13 +2,14 @@ package com.greenwealth.transaction_service.infrastructure.web;
 
 // On importe les classes depuis nos autres dossiers
 import com.greenwealth.transaction_service.application.InvestmentService;
+import com.greenwealth.transaction_service.application.dto.TransactionRequest;
 import com.greenwealth.transaction_service.domain.model.Transaction;
 import com.greenwealth.transaction_service.domain.repository.TransactionRepository;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,7 +27,10 @@ public class TransactionController {
 
     private final InvestmentService investementService; //injection from service
     @PostMapping
-    public Transaction create(@RequestBody Transaction transaction){
+    public Transaction create(@Valid @RequestBody TransactionRequest request){
+        Transaction transaction = new Transaction();
+        transaction.setDescription(request.getDescription());
+        transaction.setAmount(request.getAmount());
         transaction.setTimestamp(LocalDateTime.now());
         // save transaction for have an ID
         Transaction savedTransaction = repository.save(transaction);
