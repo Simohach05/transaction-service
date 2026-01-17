@@ -2,7 +2,7 @@ services:
   # BD PostgreSQL
   db:
     image: postgres:15
-    container_name: bank_db
+    container_name: greenwealth_db
     environment:
       POSTGRES_USER: dev_user
       POSTGRES_PASSWORD: dev_password
@@ -24,7 +24,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=dev_password
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
 
-    #Zookeeper (Obligatoire pour Kafka)
+    #Zookeeper (neccessary for Kafka)
   zookeeper:
       image: confluentinc/cp-zookeeper:7.5.0
       container_name: zookeeper
@@ -32,7 +32,7 @@ services:
         ZOOKEEPER_CLIENT_PORT: 2181
         ZOOKEEPER_TICK_TIME: 2000
 
-    #Kafka (Le Message Broker)
+    #Kafka (Message Broker)
   kafka:
       image: confluentinc/cp-kafka:7.5.0
       container_name: kafka

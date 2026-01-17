@@ -25,7 +25,7 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole("USER");
 
-        // 2. save it in database
+        // 2. save it in db
         repository.save(user);
         String token = jwtService.generateToken(user.getUsername());
         return new AuthResponse(token);

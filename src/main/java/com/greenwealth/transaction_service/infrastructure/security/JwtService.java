@@ -16,10 +16,10 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    // 🔑 CLÉ SECRÈTE (Ne la partage jamais en production !)
+    // key secrete
     private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
-    // 1. Générer un Token
+    // 1. Generate a Token
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, username);
@@ -35,12 +35,12 @@ public class JwtService {
                 .compact();
     }
 
-    // 2. Extraire le username
+    // 2. get username
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // 3. Valider le token
+    // 3. Validate token
     public boolean isTokenValid(String token, String username) {
         final String extractedUsername = extractUsername(token);
         return (extractedUsername.equals(username) && !isTokenExpired(token));
